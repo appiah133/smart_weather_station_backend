@@ -46,7 +46,6 @@
 
 
 
-
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const sequelize = require('../config/database');
@@ -75,7 +74,7 @@ const User = sequelize.define('User', {
   tableName: 'users',
   timestamps: true,
   createdAt: 'created_at',
-  updatedAt: 'updated_at',
+  updatedAt: false,       // ← fixed
 });
 
 // Hash password before saving
