@@ -1,17 +1,30 @@
-const twilio = require('twilio');
+const AfricasTalking = require('africastalking');
 
-const client = twilio(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-);
+const africastalking = AfricasTalking({
+  apiKey: process.env.AT_API_KEY,
+  username: process.env.AT_USERNAME,
+});
+
+const sms = africastalking.SMS;
 
 async function sendSms(to, message) {
-  const result = await client.messages.create({
-    body: message,
-    from: process.env.TWILIO_PHONE_NUMBER,
-    to,
+  console.log('🔑 AT_USERNAME:', process.env.AT_USERNAME);
+  console.log('🔑 AT_API_KEY:', process.env.AT_API_KEY ? 'set' : 'missing');
+
+  const result = await sms.send({
+    to: [to],
+    message: message,
   });
-  return result.sid;
+
+  console.log('📦 AT Result:', JSON.stringify(result));
+
+  const recipient = result.SMSMessageData.Recipients[0];
+
+  if (recipient.status === 'Success') {
+    return recipient.messageId;
+  } else {
+    throw new Error(`SMS failed: ${recipient.status}`);
+  }
 }
 
 module.exports = { sendSms };
