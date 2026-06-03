@@ -6,12 +6,14 @@ const express    = require('express');
 const cors       = require('cors');
 const sequelize  = require('./config/database');
 
+
 require('./models/User');
 require('./models/WeatherReading');
 
 const authRoutes    = require('./routes/auth');
 const weatherRoutes = require('./routes/weather');
 const notifyRoutes  = require('./routes/notify');
+const mlRoutes = require('./routes/ml');
 
 const app = express();
 
@@ -34,6 +36,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth',    authRoutes);
 app.use('/api/weather', weatherRoutes);
 app.use('/api/notify',  notifyRoutes);
+app.use('/api/ml', mlRoutes);
 
 const PORT = process.env.PORT || 5000;
 
